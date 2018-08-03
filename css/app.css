@@ -1,0 +1,94 @@
+/* General styles */
+* {
+    box-sizing: border-box;
+}
+
+html {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background: #ffffff url('../img/geometry2.png'); /* Background pattern from Subtle Patterns */
+    font-family: 'Coda', cursive;
+}
+
+.main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+/* 
+* Game styles
+*/
+
+/* Game area */
+.game-area {
+    width: 50%;
+    margin: 0;
+}
+
+/* Game top panel */
+.top-panel {
+    margin-bottom: 1rem;
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.top-panel__scores {
+    margin: 0;
+    padding: 0;
+    width: 1fr;
+}
+
+.top-panel__score-stars {
+    list-style: none;
+    display: inline-block;
+}
+
+.top-panel__moves {
+    width: 1fr;
+}
+
+.top-panel__reset {
+    width: 1fr;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+/* Game deck area */
+.deck-area {
+    margin: 0;
+    padding: 0;
+}
+
+.deck {
+    background: linear-gradient(160deg, #02ccba 0%, #aa7ecd 100%);
+    margin: 0;
+    padding: 1rem 2rem;
+    border-radius: 0.75rem;
+    box-shadow: 0.75rem 1rem 1.25rem 0 rgba(46, 61, 73, 0.5);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.deck__card {
+    height: 8rem;
+    width: 8rem;
+    background: #2e3d49;
+    font-size: 2rem;
+    color: #ffffff;
+    border-radius: 0.6rem;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0.5rem 0.1rem 1.25rem 0 rgba(46, 61, 73, 0.5);
+    margin: 1rem 0rem;
+    padding: 0;
+}
