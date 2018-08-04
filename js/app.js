@@ -42,6 +42,8 @@ function shuffle(array) {
 function setCards() {
     // Update the styles of the cards to match the shuffled list
     for (let i = 0; i < cardsList.length; i++) {
+        // Unflipp the card, won't have an effect if the card is already flipped
+        deck.children[i].classList.remove('deck__card--flipped');
         // The HTML element (li), which holds the card icon font as a child element
         let card = deck.children[i].firstElementChild;
         // Replace the class name to match the shuffled one from the list
@@ -57,11 +59,16 @@ function resetGame() {
 
 function deckClicked(event) {
     // Avoid responding to click events between or around cards
-    // TODO: add condition to avoid responsding to clicks on the already-flipped card
-    if (event.target.classList.contains('deck__card')) {
+    // TODO: add condition to avoid responsding to clicks on the already flipped card
+    if (event.target.classList.contains('deck__card') &&
+        !event.target.classList.contains('deck__card--flipped')) {
+        //Flip the card
+        event.target.classList.add('deck__card--flipped');
+
         // The HTML element (li) holds the card icon font as a child element
         // The icon font class is the 2nd on the element's class list
         let clickedCard = event.target.firstElementChild.classList[1];
+        
         // Check if a card is already flipped
         if (flippedCard != null) {
             let isMatching = (flippedCard == clickedCard)? true : false;
