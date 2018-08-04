@@ -97,3 +97,7 @@ body {
     background: #92c7f1;
     font-size: 2rem;
 }
+
+.deck__card--matched {
+    background: #328a00;
+}

@@ -8,7 +8,7 @@ const cardsList = ['fa-diamond', 'fa-paper-plane-o', 'fa-anchor', 'fa-bolt',
 var deck, reset = null;
 
 // To be set and managed as the game progresses
-var flippedCard = null;
+var flippedCard, flippedElement = null;
 
 // Init the app; shuffle cards (reset) and add event listeners
 document.addEventListener('DOMContentLoaded', function () {
@@ -44,6 +44,7 @@ function setCards() {
     for (let i = 0; i < cardsList.length; i++) {
         // Unflipp the card, won't have an effect if the card is already flipped
         deck.children[i].classList.remove('deck__card--flipped');
+        deck.children[i].classList.remove('deck__card--matched');
         // The HTML element (li), which holds the card icon font as a child element
         let card = deck.children[i].firstElementChild;
         // Replace the class name to match the shuffled one from the list
@@ -59,7 +60,6 @@ function resetGame() {
 
 function deckClicked(event) {
     // Avoid responding to click events between or around cards
-    // TODO: add condition to avoid responsding to clicks on the already flipped card
     if (event.target.classList.contains('deck__card') &&
         !event.target.classList.contains('deck__card--flipped')) {
         //Flip the card
@@ -73,14 +73,17 @@ function deckClicked(event) {
         if (flippedCard != null) {
             let isMatching = (flippedCard == clickedCard)? true : false;
             if (isMatching) {
+                event.target.classList.add('deck__card--matched');
+                flippedElement.classList.add('deck__card--matched');
                 flippedCard = null;
-                console.log('Matching');
+                flippedElement = null;
             } else {
                 flippedCard = null;
                 console.log('Not Matching');
             }
         } else {
             flippedCard = clickedCard;
+            flippedElement = event.target;
         }
     }
 }
