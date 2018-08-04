@@ -4,8 +4,11 @@ const cardsList = ['fa-diamond', 'fa-paper-plane-o', 'fa-anchor', 'fa-bolt',
     'fa-diamond', 'fa-bomb', 'fa-leaf', 'fa-bomb',
     'fa-bolt', 'fa-bicycle', 'fa-paper-plane-o', 'fa-cube'
 ];
-// To be initialized after the DOM content is loaded
+// To be set after the DOM content is loaded
 var deck, reset = null;
+
+// To be set and managed as the game progresses
+var flippedCard = null;
 
 // Init the app; shuffle cards (reset) and add event listeners
 document.addEventListener('DOMContentLoaded', function () {
@@ -13,6 +16,7 @@ document.addEventListener('DOMContentLoaded', function () {
     deck = document.getElementById('deck');
     reset = document.getElementById('reset');
 
+    deck.addEventListener('click', deckClicked);
     reset.addEventListener('click', resetGame);
 
     // game initialization
@@ -39,8 +43,7 @@ function setCards() {
     // Update the styles of the cards to match the shuffled list
     for (let i = 0; i < cardsList.length; i++) {
         // The HTML element (li), which holds the card icon font as a child element
-        let cardElement = deck.children[i];
-        let card = cardElement.firstElementChild;
+        let card = deck.children[i].firstElementChild;
         // Replace the class name to match the shuffled one from the list
         // The icon font class is the 2nd on the element's class list
         card.classList.replace(card.classList[1], cardsList[i]);
@@ -50,4 +53,27 @@ function setCards() {
 function resetGame() {
     shuffle(cardsList);
     setCards();
+}
+
+function deckClicked(event) {
+    // Avoid responding to click events between or around cards
+    // TODO: add condition to avoid responsding to clicks on the already-flipped card
+    if (event.target.classList.contains('deck__card')) {
+        // The HTML element (li) holds the card icon font as a child element
+        // The icon font class is the 2nd on the element's class list
+        let clickedCard = event.target.firstElementChild.classList[1];
+        // Check if a card is already flipped
+        if (flippedCard != null) {
+            let isMatching = (flippedCard == clickedCard)? true : false;
+            if (isMatching) {
+                flippedCard = null;
+                console.log('Matching');
+            } else {
+                flippedCard = null;
+                console.log('Not Matching');
+            }
+        } else {
+            flippedCard = clickedCard;
+        }
+    }
 }
