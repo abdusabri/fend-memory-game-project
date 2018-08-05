@@ -10,6 +10,7 @@ var deck, reset = null;
 // To be set and managed as the game progresses
 var flippedCard, flippedElement = null;
 var waitForMismatchedCase = false;
+var numberOfMatchedPairs = 0;
 
 // Init the app; shuffle cards (reset) and add event listeners
 document.addEventListener('DOMContentLoaded', function () {
@@ -103,6 +104,10 @@ function processMatchedCase(event) {
     flippedElement.classList.add('deck__card--matched');
     flippedCard = null;
     flippedElement = null;
+    numberOfMatchedPairs++;
+    if (numberOfMatchedPairs == 8) {
+        endGame();
+    }
 }
 
 function processMismatchedCase(event) {
@@ -118,4 +123,8 @@ function processMismatchedCase(event) {
         flippedElement = null;
         waitForMismatchedCase = false;
     }, 1250);
+}
+
+function endGame() {
+    console.log('Congrats');
 }
