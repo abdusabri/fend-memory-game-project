@@ -83,27 +83,35 @@ function deckClicked(event) {
         if (flippedCard != null) {
             let isMatching = (flippedCard == clickedCard)? true : false;
             if (isMatching) {
-                event.target.classList.add('deck__card--matched');
-                flippedElement.classList.add('deck__card--matched');
-                flippedCard = null;
-                flippedElement = null;
+                processMatchedCase(event);
             } else {
-                waitForMismatchedCase = true;
-                event.target.classList.add('deck__card--not-matched');
-                flippedElement.classList.add('deck__card--not-matched');
-                setTimeout(() => {
-                    event.target.classList.remove('deck__card--not-matched');
-                    flippedElement.classList.remove('deck__card--not-matched');
-                    event.target.classList.remove('deck__card--flipped');
-                    flippedElement.classList.remove('deck__card--flipped');
-                    flippedCard = null;
-                    flippedElement = null;
-                    waitForMismatchedCase = false;
-                }, 1250);
+                processMismatchedCase(event);
             }
         } else {
             flippedCard = clickedCard;
             flippedElement = event.target;
         }
     }
+}
+
+function processMatchedCase(event) {
+    event.target.classList.add('deck__card--matched');
+    flippedElement.classList.add('deck__card--matched');
+    flippedCard = null;
+    flippedElement = null;
+}
+
+function processMismatchedCase(event) {
+    waitForMismatchedCase = true;
+    event.target.classList.add('deck__card--not-matched');
+    flippedElement.classList.add('deck__card--not-matched');
+    setTimeout(() => {
+        event.target.classList.remove('deck__card--not-matched');
+        flippedElement.classList.remove('deck__card--not-matched');
+        event.target.classList.remove('deck__card--flipped');
+        flippedElement.classList.remove('deck__card--flipped');
+        flippedCard = null;
+        flippedElement = null;
+        waitForMismatchedCase = false;
+    }, 1250);
 }
