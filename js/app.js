@@ -55,6 +55,10 @@ function setCards() {
 }
 
 function resetGame() {
+    if (waitForMismatchedCase) {
+        setTimeout(resetGame, 250);
+        return;
+    }
     flippedCard = null;
     flippedElement = null;
     waitForMismatchedCase = false;
