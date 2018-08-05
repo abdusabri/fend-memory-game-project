@@ -102,3 +102,7 @@ body {
 .deck__card--matched {
     background: #328a00;
 }
+
+.deck__card--not-matched {
+    background: #bd142a;
+}

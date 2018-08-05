@@ -9,6 +9,7 @@ var deck, reset = null;
 
 // To be set and managed as the game progresses
 var flippedCard, flippedElement = null;
+var waitForMismatchedCase = false;
 
 // Init the app; shuffle cards (reset) and add event listeners
 document.addEventListener('DOMContentLoaded', function () {
@@ -56,11 +57,18 @@ function setCards() {
 function resetGame() {
     flippedCard = null;
     flippedElement = null;
+    waitForMismatchedCase = false;
     shuffle(cardsList);
     setCards();
 }
 
 function deckClicked(event) {
+    // Mismatched cards are kept flipped for a little more than 1 second before
+    // they are unflipped. So the waitForMismatchedCase is a flag used to prevent 
+    // Further flipping and interaction if a user clicks way too fast
+    if (waitForMismatchedCase) {
+        return;
+    }
     // Avoid responding to click events between or around cards
     if (event.target.classList.contains('deck__card') &&
         !event.target.classList.contains('deck__card--flipped')) {
@@ -80,8 +88,18 @@ function deckClicked(event) {
                 flippedCard = null;
                 flippedElement = null;
             } else {
-                flippedCard = null;
-                console.log('Not Matching');
+                waitForMismatchedCase = true;
+                event.target.classList.add('deck__card--not-matched');
+                flippedElement.classList.add('deck__card--not-matched');
+                setTimeout(() => {
+                    event.target.classList.remove('deck__card--not-matched');
+                    flippedElement.classList.remove('deck__card--not-matched');
+                    event.target.classList.remove('deck__card--flipped');
+                    flippedElement.classList.remove('deck__card--flipped');
+                    flippedCard = null;
+                    flippedElement = null;
+                    waitForMismatchedCase = false;
+                }, 1250);
             }
         } else {
             flippedCard = clickedCard;
