@@ -54,6 +54,8 @@ function setCards() {
 }
 
 function resetGame() {
+    flippedCard = null;
+    flippedElement = null;
     shuffle(cardsList);
     setCards();
 }
