@@ -96,6 +96,7 @@ body {
 .deck__card--flipped {
     background: #92c7f1;
     font-size: 2rem;
+    cursor: default;
 }
 
 .deck__card--matched {
