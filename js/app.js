@@ -65,7 +65,7 @@ function resetGame() {
     flippedElement = null;
     waitForMismatchedCase = false;
     numberOfMoves = 0;
-    movesElement.innerText = numberOfMoves;
+    movesElement.innerText = "0 Moves";
     shuffle(cardsList);
     setCards();
 }
@@ -91,7 +91,7 @@ function deckClicked(event) {
         if (flippedCard != null) {
             // Regardless of matching status, every 2 flipped cards are counted as a move
             numberOfMoves++;
-            movesElement.innerText = numberOfMoves;
+            movesElement.innerText = (numberOfMoves != 1)? numberOfMoves + " Moves" : numberOfMoves + " Move";
 
             let isMatching = (flippedCard == clickedCard)? true : false;
             if (isMatching) {
