@@ -5,18 +5,19 @@ const cardsList = ['fa-diamond', 'fa-paper-plane-o', 'fa-anchor', 'fa-bolt',
     'fa-bolt', 'fa-bicycle', 'fa-paper-plane-o', 'fa-cube'
 ];
 // To be set after the DOM content is loaded
-var deck, reset = null;
+var deck, reset, movesElement;
 
 // To be set and managed as the game progresses
-var flippedCard, flippedElement = null;
+var flippedCard = null, flippedElement = null;
 var waitForMismatchedCase = false;
-var numberOfMatchedPairs = 0;
+var numberOfMatchedPairs = 0, numberOfMoves = 0;
 
 // Init the app; shuffle cards (reset) and add event listeners
 document.addEventListener('DOMContentLoaded', function () {
     // main variables assignment and event listeners
     deck = document.getElementById('deck');
     reset = document.getElementById('reset');
+    movesElement = document.getElementById('numMoves');
 
     deck.addEventListener('click', deckClicked);
     reset.addEventListener('click', resetGame);
@@ -63,6 +64,8 @@ function resetGame() {
     flippedCard = null;
     flippedElement = null;
     waitForMismatchedCase = false;
+    numberOfMoves = 0;
+    movesElement.innerText = numberOfMoves;
     shuffle(cardsList);
     setCards();
 }
@@ -86,6 +89,10 @@ function deckClicked(event) {
         
         // Check if a card is already flipped
         if (flippedCard != null) {
+            // Regardless of matching status, every 2 flipped cards are counted as a move
+            numberOfMoves++;
+            movesElement.innerText = numberOfMoves;
+
             let isMatching = (flippedCard == clickedCard)? true : false;
             if (isMatching) {
                 processMatchedCase(event);
