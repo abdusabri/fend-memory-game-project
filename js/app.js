@@ -66,8 +66,16 @@ function resetGame() {
     waitForMismatchedCase = false;
     numberOfMoves = 0;
     movesElement.innerText = "0 Moves";
+    resetRating();
     shuffle(cardsList);
     setCards();
+}
+
+function resetRating() {
+    let stars = document.querySelectorAll('.fa-star-o');
+    stars.forEach(function(star) {
+        star.classList.replace('fa-star-o', 'fa-star');
+    });
 }
 
 function deckClicked(event) {
@@ -92,6 +100,8 @@ function deckClicked(event) {
             // Regardless of matching status, every 2 flipped cards are counted as a move
             numberOfMoves++;
             movesElement.innerText = (numberOfMoves != 1)? numberOfMoves + " Moves" : numberOfMoves + " Move";
+            
+            manageRating();
 
             let isMatching = (flippedCard == clickedCard)? true : false;
             if (isMatching) {
@@ -104,6 +114,26 @@ function deckClicked(event) {
             flippedElement = event.target;
         }
     }
+}
+
+function manageRating() {
+    /*
+        To maintain a 3-star rating, a user has to match all cards with 
+        no more than 12 moves (which means 4 wrong moves), and no more than 16
+        moves to get a 2-start rating
+    */
+
+    // Once either of the limits has been exceeded reduce one star
+    if (numberOfMoves == 13 || numberOfMoves == 17) {
+        reduceStarRating();    
+    }
+}
+
+function reduceStarRating() {
+    // This function reduces the rating by one star
+    // last-of-type selector didn't work, so changed direction in CSS to rtl
+    let starElement = document.querySelector('.fa-star');
+    starElement.classList.replace('fa-star', 'fa-star-o');
 }
 
 function processMatchedCase(event) {
