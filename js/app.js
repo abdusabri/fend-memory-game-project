@@ -5,13 +5,14 @@ const cardsList = ['fa-diamond', 'fa-paper-plane-o', 'fa-anchor', 'fa-bolt',
     'fa-bolt', 'fa-bicycle', 'fa-paper-plane-o', 'fa-cube'
 ];
 // To be set after the DOM content is loaded
-var deck, reset, movesElement;
+var deck, reset, movesElement, timeElement, modal;
 
 // To be set and managed as the game progresses
 var flippedCard = null, flippedElement = null;
 var waitForMismatchedCase = false;
 var numberOfMatchedPairs = 0, numberOfMoves = 0;
-var seconds = 0, minutes = 0, timer = null, timeElement = null;
+var seconds = 0, minutes = 0, timer = null;
+var starRating = 3;
 
 // Init the app; shuffle cards (reset) and add event listeners
 document.addEventListener('DOMContentLoaded', function () {
@@ -20,6 +21,7 @@ document.addEventListener('DOMContentLoaded', function () {
     reset = document.getElementById('reset');
     movesElement = document.getElementById('numMoves');
     timeElement = document.getElementById('time');
+    modal = document.getElementById('modal');
 
     deck.addEventListener('click', deckClicked);
     reset.addEventListener('click', resetGame);
@@ -90,6 +92,7 @@ function resetRating() {
     stars.forEach(function(star) {
         star.classList.replace('fa-star-o', 'fa-star');
     });
+    starRating = 3;
 }
 
 function deckClicked(event) {
@@ -163,6 +166,7 @@ function reduceStarRating() {
     // last-of-type selector didn't work, so changed direction in CSS to rtl
     let starElement = document.querySelector('.fa-star');
     starElement.classList.replace('fa-star', 'fa-star-o');
+    starRating--;
 }
 
 function processMatchedCase(event) {
@@ -171,6 +175,7 @@ function processMatchedCase(event) {
     flippedCard = null;
     flippedElement = null;
     numberOfMatchedPairs++;
+    // Game is won when the 8 card pairs are matched
     if (numberOfMatchedPairs == 8) {
         endGame();
     }
@@ -194,4 +199,42 @@ function processMismatchedCase(event) {
 function endGame() {
     clearInterval(timer);
     timer = null;
+    showModal();
+}
+
+function showModal() {
+    const ratingElement = document.getElementById('modalRating');
+    while (ratingElement.hasChildNodes()) {
+        ratingElement.removeChild(ratingElement.firstChild);
+    }
+
+    const stars = document.createDocumentFragment();
+    for (let i = 0; i < starRating; i++) {
+        const star = document.createElement('span');
+        star.className = "fa fa-star";
+        stars.appendChild(star);
+    }
+    ratingElement.appendChild(stars);
+    
+    document.getElementById('modalTime').textContent = timeElement.textContent;
+    
+    document.getElementById('modalYesBtn').addEventListener('click', modalYesClicked);
+    document.getElementById('modalNoBtn').addEventListener('click', modalNoClicked);
+
+    modal.style.display = "block";
+}
+
+function modalNoClicked() {
+    closeModal();
+}
+
+function modalYesClicked() {
+    closeModal();
+    resetGame();
+}
+
+function closeModal() {
+    document.getElementById('modalYesBtn').removeEventListener('click', modalYesClicked);
+    document.getElementById('modalNoBtn').removeEventListener('click', modalNoClicked);
+    modal.style.display = "none";
 }

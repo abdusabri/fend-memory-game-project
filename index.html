@@ -100,6 +100,31 @@
                 </ul>
             </section>
         </article>
+
+        <!-- Modal -->
+        <div id="modal" class="modal">
+            <!-- Modal content -->
+            <div class="modal__content">
+                <div class="modal__header">
+                    <h2>Congratulations!</h2>
+                </div>
+                <div class="modal__body">
+                    <span>You achieved a rating of: </span>
+                    <div id="modalRating" class="modal__star-text"></div>
+                    <div class="modal__time-text">
+                        <span>And your time is: </span>
+                        <span id="modalTime"></span>
+                    </div>
+                </div>
+                <div class="modal__footer">
+                    <h3>Would you like to play again?</h3>
+                    <div class="modal__actions">
+                        <button id="modalYesBtn" class="modal__button">Yes</button>
+                        <button id="modalNoBtn" class="modal__button">No</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </main>
 </body>
 </html>
