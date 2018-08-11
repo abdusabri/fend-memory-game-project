@@ -11,6 +11,7 @@ var deck, reset, movesElement;
 var flippedCard = null, flippedElement = null;
 var waitForMismatchedCase = false;
 var numberOfMatchedPairs = 0, numberOfMoves = 0;
+var seconds = 0, minutes = 0, timer = null, timeElement = null;
 
 // Init the app; shuffle cards (reset) and add event listeners
 document.addEventListener('DOMContentLoaded', function () {
@@ -18,6 +19,7 @@ document.addEventListener('DOMContentLoaded', function () {
     deck = document.getElementById('deck');
     reset = document.getElementById('reset');
     movesElement = document.getElementById('numMoves');
+    timeElement = document.getElementById('time');
 
     deck.addEventListener('click', deckClicked);
     reset.addEventListener('click', resetGame);
@@ -61,12 +63,24 @@ function resetGame() {
         setTimeout(resetGame, 250);
         return;
     }
+
     flippedCard = null;
     flippedElement = null;
+
     waitForMismatchedCase = false;
+    numberOfMatchedPairs = 0;
+    
     numberOfMoves = 0;
     movesElement.innerText = "0 Moves";
+    
+    clearInterval(timer);
+    seconds = 0;
+    minutes = 0;
+    timer = null;
+    timeElement.innerText = "00:00";
+    
     resetRating();
+    
     shuffle(cardsList);
     setCards();
 }
@@ -88,6 +102,10 @@ function deckClicked(event) {
     // Avoid responding to click events between or around cards
     if (event.target.classList.contains('deck__card') &&
         !event.target.classList.contains('deck__card--flipped')) {
+        if (timer == null) {
+            timer = setInterval(timerTick, 1000);
+        }
+
         //Flip the card
         event.target.classList.add('deck__card--flipped');
 
@@ -114,6 +132,17 @@ function deckClicked(event) {
             flippedElement = event.target;
         }
     }
+}
+
+function timerTick() {
+    seconds++;
+    if (seconds >= 60) {
+        seconds = 0;
+        minutes++;
+    }
+    
+    timeElement.innerText = (minutes ? (minutes > 9 ? minutes : "0" + minutes) : "00") + 
+        ":" + (seconds > 9 ? seconds : "0" + seconds);
 }
 
 function manageRating() {
@@ -163,5 +192,6 @@ function processMismatchedCase(event) {
 }
 
 function endGame() {
-    console.log('Congrats');
+    clearInterval(timer);
+    timer = null;
 }

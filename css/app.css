@@ -54,6 +54,10 @@ body {
     width: 1fr;
 }
 
+.top-panel__time {
+    width: 1fr;
+}
+
 .top-panel__reset {
     width: 1fr;
     font-weight: 600;
