@@ -9,7 +9,7 @@ var deck, reset, movesElement, timeElement, modal;
 
 // To be set and managed as the game progresses
 var flippedCard = null, flippedElement = null;
-var waitForMismatchedCase = false;
+var waitForMismatchedCase = false, mismatchTrigger = null;
 var numberOfMatchedPairs = 0, numberOfMoves = 0;
 var seconds = 0, minutes = 0, timer = null;
 var starRating = 3;
@@ -62,8 +62,7 @@ function setCards() {
 
 function resetGame() {
     if (waitForMismatchedCase) {
-        setTimeout(resetGame, 250);
-        return;
+        forceFlip();
     }
 
     flippedCard = null;
@@ -87,6 +86,12 @@ function resetGame() {
     setCards();
 }
 
+function forceFlip() {
+    mismatchTrigger.forceTrigger();
+    mismatchTrigger = null;
+    waitForMismatchedCase = false;
+}
+
 function resetRating() {
     let stars = document.querySelectorAll('.fa-star-o');
     stars.forEach(function(star) {
@@ -97,10 +102,10 @@ function resetRating() {
 
 function deckClicked(event) {
     // Mismatched cards are kept flipped for a little more than 1 second before
-    // they are unflipped. So the waitForMismatchedCase is a flag used to prevent 
-    // Further flipping and interaction if a user clicks way too fast
+    // they are unflipped. forceFlip function is used to handle the case when 
+    // the user clicks sooner than the timeout
     if (waitForMismatchedCase) {
-        return;
+        forceFlip();
     }
     // Avoid responding to click events between or around cards
     if (event.target.classList.contains('deck__card') &&
@@ -185,7 +190,12 @@ function processMismatchedCase(event) {
     waitForMismatchedCase = true;
     event.target.classList.add('deck__card--not-matched');
     flippedElement.classList.add('deck__card--not-matched');
-    setTimeout(() => {
+    
+    // Solution inspired by 
+    // https://stackoverflow.com/questions/7689233/force-settimeout-to-fire-its-payload-earlier-than-originally-set
+    let timeoutId = setTimeout(flipMismatchedCards, 1250, event);
+
+    function flipMismatchedCards(event) {
         event.target.classList.remove('deck__card--not-matched');
         flippedElement.classList.remove('deck__card--not-matched');
         event.target.classList.remove('deck__card--flipped');
@@ -193,7 +203,14 @@ function processMismatchedCase(event) {
         flippedCard = null;
         flippedElement = null;
         waitForMismatchedCase = false;
-    }, 1250);
+    }
+
+    mismatchTrigger = {
+        forceTrigger: function() {
+            clearTimeout(timeoutId);
+            flipMismatchedCards(event);
+        }
+    };
 }
 
 function endGame() {
