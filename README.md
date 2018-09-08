@@ -2,7 +2,7 @@
 
 ## Project Summary
 
-This is the second project as part of my Front-End Web Development Nanodegree. It is a memory matching game. To practice HTML, CSS, and JavaScript I didn't use any frameworks. In order to win the game, a player has to match 8 pairs of cards.
+This is the second project as part of my Front-End Web Development Nanodegree. It is a memory matching game. To practice HTML, CSS, and JavaScript I didn't use any frameworks. In order to win the game, a player has to match 8 pairs of cards. The game can be played [here](https://abdusabri.github.io/fend-memory-game-project/)
 
 ### Game Play Notes
 
